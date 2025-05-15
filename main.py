@@ -1,14 +1,14 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from asteval import Interpreter, make_symbol_table
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Any, Dict
 
 app = FastAPI()
 
 # Crear symbol table segura, sin bucles ni operaciones peligrosas
 safe_symbols = make_symbol_table(
-    to_date=lambda s: datetime.strptime(s, "%Y-%m-%d"),
+    to_date=lambda s, fmt="%Y-%m-%d %H:%M:%S": datetime.strptime(s, fmt),
     substring=lambda s, i, j: s[i:j],
     upper=lambda s: s.upper(),
     lower=lambda s: s.lower(),
@@ -17,7 +17,8 @@ safe_symbols = make_symbol_table(
     int=int,
     float=float,
     str=str,
-    bool=bool
+    bool=bool,
+    timedelta=timedelta
 )
 
 # Instanciar el intérprete con símbolos seguros
