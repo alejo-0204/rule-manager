@@ -1,0 +1,4 @@
+fastapi
+uvicorn
+asteval
+pydantic
